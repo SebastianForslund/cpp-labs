@@ -1,5 +1,5 @@
-#ifndef __USERTABLE_H
-#define __USERTABLE_H
+#ifndef USERTABLE_H
+#define USERTABLE_H
 
 #include <iostream>
 
