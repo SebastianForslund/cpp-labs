@@ -1,0 +1,16 @@
+------------Lab 1 anteckningar------------
+Problemet i A4 är ett linker error som kommer ifrån att
+man inte hittar funktionen "the_function" eftersom man
+inte "länkar ihop" separate_main-o och separate_fn.o.
+
+A5: När jag körde make so kompilerades och länkades prog.
+När jag gjorde make igen så stod det att det var "up to
+date".
+
+A6: Vid första anropet efter jag ändrade i makefile
+för att inkludera mitt "helloworld"-program, så stod
+det "Nothing to be done for "all"". Därför lade jag till
+-c, och då kompilerades helloworld.cc. Då skapades
+helloworld som fungerade att köra.
+Förstår inte riktigt vilken information som finns i
+.d-filer.
