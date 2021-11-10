@@ -1,0 +1,31 @@
+1. En deklaration säger att en funktion finnns,
+en definition implementerar.
+
+2. Den kollar ifall något redan är definierat,
+annars gör den det.
+
+3. En linker error märks när man bygger programmet.
+Oftast är det inget fel i själva källkoden, det kan
+snarare vara problem med dina #includes eller makefile.
+
+4. För att kunna använda MakefileWithDeps för att
+bygga mitt helloworld program får jag lägga till
+helloworldprogrammet i PROGS samt lägga till
+"helloworld: helloworld.o" i link delen.
+
+5. På grund av min simpla krypteringsalgoritm tror
+jag att inget hade förändrats. Overflow kommer 
+oavsett att ske vid ett visst värde, men
+det kommer alltid revertas när decode görs.
+
+6. infiles input stream skippar mellanslag 
+by default.
+
+7. För att få en stacktrace kan man köra
+programmet i gdb-debuggern och sedan göra kommandot
+"bt" som ger en stack trace.
+
+8. En breakpoint pausar när programmet når en
+viss rad.
+En watchpoint pausar när programmet har ändrat
+en viss variabel.
