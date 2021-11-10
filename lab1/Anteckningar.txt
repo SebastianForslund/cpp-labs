@@ -14,3 +14,89 @@ det "Nothing to be done for "all"". Därför lade jag till
 helloworld som fungerade att köra.
 Förstår inte riktigt vilken information som finns i
 .d-filer.
+
+A10,11: Dangling blir abortad och reslutatet blir alltid
+olika eftersom dangling pointer refererar till ett
+slumpmässig ställe i minnet.
+
+I bounds blir också svaret olika på grund av samma
+anledning. De första 10 accesserna fungerar, men
+efter det så blir programmet out of bounds.
+
+I bounds-heap blir dock svaret alltid samma, fast 
+fortfarande fel.
+
+I sum blir summan fel.
+
+UB ger segmentation fault.
+
+leak:
+Entering inner block
+leaving inner block
+leaving example1
+leaving main
+
+När man gör makefilen som använder sanitizers så får
+man följande resultat:
+
+Får ingen skillnad på någon av dom :/
+Fast när jag kör sum-alt så får jag error från sanitizern;
+Den säger att det blir global-buffer-overflow, vilket
+händer när man försöker lägga in mer data än vad en
+datatyp har plats till.
+
+Dangling, UB, leak.
+
+I dangling körde jag först programmet i debuggern och
+sedan använde jag bt för att få fram stack tracet. 
+I stacktracet får jag en malloc_printerr (double free 
+detected in tcache 2) vilket ledde till en abort.
+
+I UB körde jag och hämtade sedan stack tracet.
+Där fick jag "error reading varialbe: Cannot access
+memory at address 0x2".
+
+I leak fanns ingen stacktrace.
+
+Jag testade även köra sum, men jag fick ingen stacktrace.
+Jag testade göra makefile med o0 (och B) istället.
+
+I leak fick jag detected memory leaks.
+
+bounds-heap fick jag heap-buffer-overflow.
+
+UB ger runtime error, reached end of a value-returning
+function without returning a value.
+
+Sum gav "load of address with insufficient space for
+and object of type int."
+
+bounds ger stack-buffer-overflow.
+
+Dangling ger heap-use-after-free.
+
+
+A12:
+För att göra A12 gjorde jag makefile utan sanitizers (O0).
+
+Valgrind i dangling detekterar ett fel. Invalid read/write
+of size 4.
+
+Bounds verkar inte ge några fel.
+
+I bounds-heap står det invalid read of size 4 igen.
+Det står dock "All heap blocks were freed -- no leaks
+are possible", vilket låter konstigt med tanke på
+programmet.
+
+Sum hittar inga errors.
+
+UB ger en massa "use of uninitialized values".
+
+Leak ger en summary på hur mycket som leakades. 120bytes 
+i detta fallet.
+
+Jag körde även sum-alt som inte gav någon märkvärdig
+output.
+
+
