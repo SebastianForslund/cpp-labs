@@ -1,3 +1,1 @@
-coding.o: coding.cc coding.h
-
-coding.h:
+coding.o: coding.cc
