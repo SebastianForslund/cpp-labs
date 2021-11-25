@@ -23,7 +23,7 @@ Dictionary::Dictionary() {
 	
 	string in = "";
 	string currentWord = "";
-	vector<Word> words[max_characters];
+	//vector<Word> words[max_characters]; //denna är ju lokal :(((((((((((
 	vector<string> trigrams;
 	while (std::getline(inputStream, in, '\n')){
 		
@@ -42,7 +42,13 @@ Dictionary::Dictionary() {
 			}
 		}
 		Word w(currentWord, trigrams);
-		words[currentWord.size()].push_back(w);
+		
+		this->words[currentWord.size()].push_back(w);
+	}
+	
+	for (auto it = words[5].begin(); it != words[5].end(); ++it) {
+		Word w = *it;
+		cout << w.get_word() << endl;
 	}
 }
 
@@ -58,6 +64,10 @@ bool Dictionary::contains(const string& word) const {
 vector<string> Dictionary::get_suggestions(const string& word) const {
 	vector<string> suggestions;
 	add_trigram_suggestions(suggestions, word);
+	cout << "Showing suggestions" << endl;
+	for (auto it = suggestions.begin(); it != suggestions.end(); ++it) {
+		cout  << *it << endl;
+	}
 	rank_suggestions(suggestions, word);
 	trim_suggestions(suggestions);
 	return suggestions;
@@ -71,22 +81,29 @@ void Dictionary::add_trigram_suggestions(vector<string> suggestions, const strin
 			input_trigrams.push_back(trig); //Kan jag göra detta i en rad?
 		}
 	}
-	
 	sort(input_trigrams.begin(), input_trigrams.end()); //trigrams are now in a sorted vector
+	for (auto it = input_trigrams.begin(); it != input_trigrams.end(); ++it) {
+		cout << "input trig: " << *it << endl;
+	}
+	Word baba("word", input_trigrams);
 	
 	if (input.size() > 0 && input.size() < this->max_characters) {
 		cout << "input size check passed." << endl;
-		cout << "random words size: " << this->words[input.size()].size() << endl; //Words är tom just nu
-		for (int i=-1; i<1; ++i) { //Checks words of similar length
+		cout << "index: " << input.size() << endl;
+		cout << "words size at this index: " << this->words[input.size()].size() << endl;
+		for (int i=0; i<2; ++i) { //Checks words of similar length
 			vector<Word> words_vector = this->words[input.size() + i];
+			
 			for (auto it = words_vector.begin(); it != words_vector.end(); ++it) {
-				Word w = *it; //*it.get_matches() didn't work for some reason
+				Word w = *it;
 				int matches = w.get_matches(input_trigrams);
-				cout << "matches: " << matches << endl;
+				//cout << "matches: " << matches << endl;
+				//cout << "Current word: " << w.get_word() << endl;
+				
 				if (matches >= input_trigrams.size()/2) {
 					w = *it;
 					suggestions.push_back(w.get_word());
-					cout << "Added a suggestion." << endl;
+					cout << "Added a suggestion: " << w.get_word() << endl;
 				}
 			}
 		}		
