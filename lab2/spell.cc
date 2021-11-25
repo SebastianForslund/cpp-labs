@@ -33,6 +33,9 @@ int main() {
 	while (cin >> word) {
 		transform(word.begin(), word.end(), word.begin(), ::tolower);
         check_word(word, dict);
+	if (word == ":q") {
+		break;
+	}
 	}
     return 0;
 }
