@@ -13,7 +13,7 @@ Word::Word(const string& w, const vector<string>& t) {
 	//auto b = t.begin(); //Why is this frickin vector empty
 	//cout << "Bapparappa " << *b << endl;
 	this->trigramVector = const_cast<vector<string>&>(t); //This is always 0
-	cout << "word trigram vector size: " << this->trigramVector.size() << " other: " << t.size() << endl;
+	//cout << "word trigram vector size: " << this->trigramVector.size() << " other: " << t.size() << endl;
 }
 
 string Word::get_word() const {

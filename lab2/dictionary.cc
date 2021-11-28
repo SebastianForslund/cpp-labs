@@ -17,7 +17,7 @@ using std::sort;
 
 Dictionary::Dictionary() {
 	ifstream inputStream;
-	inputStream.open("words");
+	inputStream.open("wordsOut.txt");
 	
 	//this.max_characters = 25; change it in the header file
 	
@@ -36,20 +36,22 @@ Dictionary::Dictionary() {
 		for (auto it = in.begin() + currentWord.size(); *it != '\n' && it != in.end(); ++it) {
 			if (*it != ' ') {
 				currentTrig += *it;
+				//cout << "not space" << endl;
 			} else {
 				trigrams.push_back(currentTrig);
+				//cout << "added trigram: " << currentTrig << endl;
 				currentTrig = "";
 			}
 		}
 		Word w(currentWord, trigrams);
-		
 		this->words[currentWord.size()].push_back(w);
-	}
-	
+		//cout << "word has been put" << endl;
+	} // Program never exits this bracket.
 	for (auto it = words[5].begin(); it != words[5].end(); ++it) {
 		Word w = *it;
 		cout << w.get_word() << endl;
 	}
+	cout << "Dictionary load compelted." << endl;
 }
 
 bool Dictionary::contains(const string& word) const {
