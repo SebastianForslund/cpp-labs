@@ -18,46 +18,42 @@ int main(int argc, char**args) {
 	
 	ofstream outStream {fileTo};
 	ifstream inStream {wordsFile};
-	char x[32];
+	string inputWord;
 	int lineCount = 0;
-	while (inStream.getline(x, 32)) {
-		string newX = "";
-		int length = 0;
-		while (x[length] != '\0') {
-			newX+=x[length];
-			length++;
-		}
+	while (std::getline(inStream, inputWord)) {
+		int length = inputWord.length();
 		if (length > 2) {
 			int trigramCount = length-2; //Includes the 0.
-			newX += ' ';
-			newX += std::to_string(trigramCount);
+			inputWord += ' ';
+			inputWord += std::to_string(trigramCount);
 			
 			string output = "";
-			vector<string> names;
+			vector<string> trigrams;
 			for (int i=0; i < trigramCount; i++) {
-				output = {x[i], x[i+1], x[i+2]};
-				names.push_back(output);
+				output = {inputWord[i], inputWord[i+1], inputWord[i+2]};
+				trigrams.push_back(output);
 			}
 			
-			std::sort(names.begin(), names.end(), [](string a, string b) {
+			std::sort(trigrams.begin(), trigrams.end(), [](string a, string b) {
 				return a<b;
 			});
 			
-			for (auto it = names.begin(); it != names.end(); ++it) {
-				newX += ' ' + *it;	
+			for (auto it = trigrams.begin(); it != trigrams.end(); ++it) {
+				inputWord += ' ' + *it;	
 			}
 			
-			newX += '\n';
-			std::for_each(newX.begin(), newX.end(), [](char & c) {
+			inputWord += '\n';
+			std::for_each(inputWord.begin(), inputWord.end(), [](char & c) {
 				c = tolower(c);
 			});
 
-			if (!newX.find("Å") || !newX.find("é") || !newX.find("'")) { // "'" doesn't work for some reason
-				newX = "";
+			if (!inputWord.find("Å") || !inputWord.find("é") || !inputWord.find("'")) { 
+				// "'" doesn't work for some reason
+				inputWord = "";
 			}
 			lineCount++;
-			cout << newX << "linecount: " << lineCount << endl;
-			outStream << newX;
+			cout << inputWord << "linecount: " << lineCount << endl;
+			outStream << inputWord;
 		}
 	}
 	return 0;	
