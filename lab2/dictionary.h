@@ -18,9 +18,9 @@ private:
 	std::vector<Word> words[max_characters];
 	std::vector<std::string> suggestions;
 	
-	void add_trigram_suggestions(std::vector<std::string> suggestions, const std::string& input) const;
-	void rank_suggestions(std::vector<std::string> suggestions, const std::string& input) const;
-	void trim_suggestions(std::vector<std::string> suggestions) const;
+	void add_trigram_suggestions(std::vector<std::string>& suggestions, const std::string& input) const;
+	void rank_suggestions(std::vector<std::string>& suggestions, const std::string& input) const;
+	void trim_suggestions(std::vector<std::string>& suggestions) const;
 	
 	unsigned int edit_distance(const std::string& s1, const std::string& s2) const;
 };

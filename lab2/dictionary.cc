@@ -4,6 +4,7 @@
 #include <iostream>
 #include <algorithm>
 #include <unordered_set>
+#include <sstream>
 #include "word.h"
 #include "dictionary.h"
 
@@ -14,42 +15,37 @@ using std::endl;
 using std::cout;
 using std::ifstream;
 using std::sort;
+using std::stringstream;
 
 Dictionary::Dictionary() {
 	ifstream inputStream;
 	inputStream.open("wordsOut.txt");
-	
 	//this.max_characters = 25; change it in the header file
-	
+	int wordCount = 0;
 	string in = "";
-	string currentWord = "";
-	//vector<Word> words[max_characters]; //denna är ju lokal :(((((((((((
 	vector<string> trigrams;
 	while (std::getline(inputStream, in, '\n')){
+		string item = "";
+		stringstream ss(in);
+		string currentWord;
+		int ignoreCount = 2;
+		vector<string> trigVector;
 		
-		currentWord = "";
-		for (auto it = in.begin(); *it != ' ' && it != in.end(); ++it) {
-			currentWord += *it;
-		}
-
-		string currentTrig = "";
-		for (auto it = in.begin() + currentWord.size(); *it != '\n' && it != in.end(); ++it) {
-			if (*it != ' ') {
-				currentTrig += *it;
-				//cout << "not space" << endl;
+		while (std::getline(ss, item, ' ')) {
+			if (ignoreCount == 2) {
+				currentWord = item;
+			} 
+			if (ignoreCount != 0) {
+				ignoreCount--;
 			} else {
-				trigrams.push_back(currentTrig);
-				//cout << "added trigram: " << currentTrig << endl;
-				currentTrig = "";
+				trigVector.push_back(item);
 			}
 		}
-		Word w(currentWord, trigrams);
+		wordCount++;
+		Word w(currentWord, trigVector);
 		this->words[currentWord.size()].push_back(w);
-		//cout << "word has been put" << endl;
-	} // Program never exits this bracket.
-	for (auto it = words[5].begin(); it != words[5].end(); ++it) {
-		Word w = *it;
-		cout << w.get_word() << endl;
+		this->allWords.insert(currentWord);
+		cout << "word number " << wordCount << " out of approx. 102 199." << endl;
 	}
 	cout << "Dictionary load compelted." << endl;
 }
@@ -58,7 +54,6 @@ bool Dictionary::contains(const string& word) const {
 	if (allWords.find(word) == allWords.end()) {
 		return false;
 	} else {
-		cout << *allWords.find(word) << endl;
 		return true;
 	}
 }
@@ -66,54 +61,61 @@ bool Dictionary::contains(const string& word) const {
 vector<string> Dictionary::get_suggestions(const string& word) const {
 	vector<string> suggestions;
 	add_trigram_suggestions(suggestions, word);
-	cout << "Showing suggestions" << endl;
+	/*
+	cout << "Showing raw suggestions: " << endl;
 	for (auto it = suggestions.begin(); it != suggestions.end(); ++it) {
 		cout  << *it << endl;
 	}
+	*/
 	rank_suggestions(suggestions, word);
+	/*
+	cout << "Showing ranked suggestions: " << endl;
+	for (auto it = suggestions.begin(); it != suggestions.end(); ++it) {
+		cout  << *it << endl;
+	}
+	*/
 	trim_suggestions(suggestions);
+	/*
+	cout << "Showing trimmed suggestions: " << endl;
+	for (auto it = suggestions.begin(); it != suggestions.end(); ++it) {
+		cout  << *it << endl;
+	}
+	*/
 	return suggestions;
 }
 
-void Dictionary::add_trigram_suggestions(vector<string> suggestions, const string& input) const {
+void Dictionary::add_trigram_suggestions(vector<string>& suggestions, const string& input) const {
 	vector<string> input_trigrams;
 	if (input.size() > 2) {
-		for (auto it = input.begin(); it != input.end()-2; ++it) {
+		for (auto it = input.begin(); it != input.end()-2; ++it) { //Finds all trigrams
 			string trig = {*it, *(it+1), *(it+2)};
-			input_trigrams.push_back(trig); //Kan jag göra detta i en rad?
+			input_trigrams.push_back(trig); //Går det att göra detta i en rad?
 		}
 	}
-	sort(input_trigrams.begin(), input_trigrams.end()); //trigrams are now in a sorted vector
-	for (auto it = input_trigrams.begin(); it != input_trigrams.end(); ++it) {
-		cout << "input trig: " << *it << endl;
-	}
+	sort(input_trigrams.begin(), input_trigrams.end()); //The trigram vector is now alphabetically sorted.
 	Word baba("word", input_trigrams);
-	
+
 	if (input.size() > 0 && input.size() < this->max_characters) {
-		cout << "input size check passed." << endl;
-		cout << "index: " << input.size() << endl;
-		cout << "words size at this index: " << this->words[input.size()].size() << endl;
-		for (int i=0; i<2; ++i) { //Checks words of similar length
-			vector<Word> words_vector = this->words[input.size() + i];
+		cout << "Word length: " << input.size() << endl;
+		cout << "There are " << this->words[input.size()].size() << " words of this length in the dictionary: " << endl;
+		for (int i = -1; i < 2; ++i) { //Checks words of similar length
+			vector<Word> words_vector = this->words[input.size() + i]; //Gets the words of the current length.
 			
 			for (auto it = words_vector.begin(); it != words_vector.end(); ++it) {
 				Word w = *it;
 				int matches = w.get_matches(input_trigrams);
-				//cout << "matches: " << matches << endl;
-				//cout << "Current word: " << w.get_word() << endl;
-				
-				if (matches >= input_trigrams.size()/2) {
+				if (matches >= input_trigrams.size()/2) { //Add as a suggestion if more than half of tris are matches.
 					w = *it;
 					suggestions.push_back(w.get_word());
-					cout << "Added a suggestion: " << w.get_word() << endl;
 				}
 			}
 		}		
+	} else {
+		cout << "ERROR: This input exceeds the maximum length of inputs! (or is empty)" << endl;
 	}
-	
 }
 
-void Dictionary::rank_suggestions(vector<string> suggestions, const string& input) const {
+void Dictionary::rank_suggestions(vector<string>& suggestions, const string& input) const {
 	sort(suggestions.begin(), suggestions.end(), 
 		[input, this](string a, string b) {
 			return this->edit_distance(a, input) < this->edit_distance(b, input);
@@ -138,7 +140,7 @@ unsigned int Dictionary::edit_distance(const string& s1, const string& s2) const
 	return d[len1][len2];
 }
 
-void Dictionary::trim_suggestions(vector<string> suggestions) const {
+void Dictionary::trim_suggestions(vector<string>& suggestions) const {
 	if (suggestions.size() > 5) {
 		suggestions.resize(5);
 	}

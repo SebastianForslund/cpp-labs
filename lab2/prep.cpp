@@ -19,7 +19,7 @@ int main(int argc, char**args) {
 	ofstream outStream {fileTo};
 	ifstream inStream {wordsFile};
 	char x[32];
-
+	int lineCount = 0;
 	while (inStream.getline(x, 32)) {
 		string newX = "";
 		int length = 0;
@@ -55,7 +55,8 @@ int main(int argc, char**args) {
 			if (!newX.find("Å") || !newX.find("é") || !newX.find("'")) { // "'" doesn't work for some reason
 				newX = "";
 			}
-			cout << newX;
+			lineCount++;
+			cout << newX << "linecount: " << lineCount << endl;
 			outStream << newX;
 		}
 	}
