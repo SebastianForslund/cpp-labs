@@ -1,24 +1,33 @@
 #include "UserTable.h"
 #include <fstream>
 #include <algorithm>
+#include <iostream>
 
+using std::cout;
+using std::endl;
+using std::string;
 const User UserTable::user_not_found = User{-1,"Not Found"};
 
 UserTable::UserTable() :users{new User[capacity]} { }
 
 UserTable::UserTable(const std::string& fname) :UserTable{}
 {
-    std::ifstream ufile(fname);
+	users = new User[capacity];
+    std::ifstream ufile(fname, std::ifstream::in);
 
     if(ufile.is_open()) {
-        while(ufile) {
+        while(ufile.good()) {
             int cn;
-            if(ufile >> cn ) {
+            if(ufile >> cn) {
+				//cout << cn << endl;
                 ufile.ignore(); // skip space
-                char n[80];
-                ufile.getline(n,80);
-                addUser(User(cn,n));
-
+				std::string n;
+				std::getline(ufile, n);
+				//cout << n << endl;
+				n.pop_back(); //finns en newline på varje rad av txt-filen.
+				User u(cn, n);
+				//cout << u << endl;
+                addUser(u);
             }
         }
     } else {
@@ -29,20 +38,20 @@ UserTable::UserTable(const std::string& fname) :UserTable{}
 void UserTable::addUser(const User& u)
 {
     // gör tabellen större vid behov
+
     ensureCapacity(n+1);
     // 1. Hitta rätt plats
     int pos{0};
     while ( (pos < n) && (users[pos].getCardNbr() < u.getCardNbr())){
         ++pos;
     }
-
     //2. skapa lucka i vektorn
     for(int i=n; i > pos; --i){
         users[i] = users[i-1];
     }
-
     //3. stoppa in den nya användaren i luckan
     users[pos] = u;
+	n++;
 }
 
 User UserTable::find(int c) const
@@ -53,28 +62,30 @@ User UserTable::find(int c) const
     int high = n - 1;
     int mid = -1;
     bool found = false;
-    while (low < high && ! found) {
-        mid = (low + high) / 2;
+    while (low <= high && ! found) { //ändrade till <=.
+        mid = low + (high - low) / 2; //Ändrat fån (low + high) / 2
         //
         int midnbr = users[mid].getCardNbr();
-        if (midnbr = c) {
+        if (midnbr == c) {
             found = true;
         } else if (users[mid].getCardNbr() < c) {
             low = mid + 1;
-        } else {
+        } else { // >c
             high = mid - 1;
         }
     }
 
     return found ? users[mid] : user_not_found;
 }
-User UserTable::find(std::string name) const
+User UserTable::find(std::string name) const //ingen aning varför denna inte funkar.
 {
-    for (int i = 0; i != n; ++i) {
-        if (users[i].getName() == name) {
+	//cout << "n: " << n << endl;
+	//cout << typeid(name).name() << endl;
+    for (int i = 0; i < n; ++i) {
+		//cout << i << endl;
+		//cout << typeid(users[i].getName()).name() << endl;
+        if (users[i].getName() == name) { //Något måste vara fucked up här
             return users[i];
-        } else {
-            return user_not_found;
         }
     }
     return user_not_found;
@@ -112,11 +123,11 @@ int testFindNbr(const UserTable ut)
 {
     for (int i = 0; i < ut.n; i++) {
         int nbr = ut.users[i].getCardNbr();
-        User found = ut.find(nbr);
-        if (found != ut.users[i]) {
+        if (ut.find(nbr) != ut.users[i]) {
             return nbr;
         }
     }
+	
     return 0;
 }
 

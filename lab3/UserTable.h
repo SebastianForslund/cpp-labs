@@ -9,7 +9,7 @@ class UserTable{
 public:
     UserTable();
     UserTable(const std::string&);
-    ~UserTable() {delete[] users;}
+    ~UserTable() {std::cout << "deleted table" << std::endl;}
 
     void addUser(const User&);
     User find(int) const;

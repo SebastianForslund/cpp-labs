@@ -1,0 +1,89 @@
+Efter jag skrivit min testklass så hittade
+jag aldrig något med hjälp av find. Vid jämförelse
+av users.txt så ser jag att alla borde ha hittat
+något.
+
+När jag gjorde table.print(cout); så fick jag
+bara ut ------- och ====== (Där finns inget)
+i UserTable.
+
+När jag lade till en ny användare fanns fortfarande
+inget i printouten från UserTable.
+
+Med hjälp av lite debugging har jag märkt att
+felet i konstruktorn ligger i addUser().
+Jag ändrade lite annat i addUser också, vilket 
+kan ha fixat några saker, men jag testade aldrig
+om det faktiskt förändrade något.
+
+Från början är users bara en user*, och pekar
+inte till någon array, eftersom ensureCapacity
+inte köra då capacity-attributet från början
+har värdet 1000. Därför gör jag 
+users = new User[capacity]; i konstruktorn.
+
+Ovanstående förändring gjorde att table.print()
+nu printar ut rätt data när jag kontrollerar
+med users.txt filen.
+
+Jag kollade sedan på addUser, och jag tror
+den var felfri. Jag ändrade i mitt test så att
+Usern jag lade in i listan hade card number 99998,
+vilket gjorde att jag såg den usern när jag
+gjorde UserTable.print(cout), vilket tyder på
+att addUser fungerar. 
+
+Vid test av getNbrUsers() märkte jag att denna
+funktion nu fungerade.
+
+Just nu fungerar ingen av find-metoderna.
+
+Jag tog bort else-satsen i find-string eftersom 
+den i detta fall kommer returnera det första
+i listan som inte stämmer överens med name.
+
+Det fungerar när jag gör find på användaren
+jag lade till själv, men Jens Holmgren fungerar
+inte.
+
+Jag spenderade mycket tid för att försäkra
+mig på att adduser inte skrev över en
+användare när den läggs till.
+
+Jag testade fixa search int, och jag fixade
+midnbr = c till midnbr == c. Då returnerade den
+Irene två gånger. 21330 -> 21330 Irene och
+21331 -> 21330. Då såg jag att jag bara hade
+skrivit fel i testet så att jag i själva verket
+letade efter 21330 två gånger... 21331 hittas inte.
+
+Men 21331 är egentligen tony, så något fel finns.
+21331 hittas aldrig oavsett ordning.
+
+När jag ändrade från low < high till low <= high
+så fungerade algoritmen för att hitta med int.
+Nu är det bara algoritmen för att hitta med string
+kvar.
+
+Jag får segmentation fault när jag kör testFindNbr.
+Jag testade göra så att nya user objekt inte skapas
+men det hjälpte inget. 
+
+Efter jag använde gdb för att kolla var
+segmentation fault sker, märkte jag att det sker
+när man gör delete på usertablet. 
+
+Eftersom usertable finns på stacken så kommer
+man inte hinna göra delete[] förens objektet
+redan är borttaget. Därför bör man ta bort denna
+destruktorn.
+
+Jag ändrade i konstruktorn så att jag använde
+string till namen istället för char-array,
+eftersom jag trodde att typerna kanske gjorde
+något problem, men inget hände.
+
+Till slut förstod jag att inmatningsfilen har
+en \n i varje rad, därför gör jag nu pop_back
+vid varje input för att ta bort den. Nu fungerar
+det att söka efter namn.
