@@ -8,6 +8,10 @@ public:
 	int getYear() const;       // get the year
 	int getMonth() const;      // get the month
 	int getDay() const;        // get the day
+	
+	istream& operator>> (istream& is, Date &d);
+	ostream& operator<< (ostream& os, const Date &d);
+	
 	void next();               // advance to next day
 private:
 	int year;  // the year (four digits)

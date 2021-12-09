@@ -9,7 +9,9 @@ class UserTable{
 public:
     UserTable();
     UserTable(const std::string&);
-    ~UserTable() {std::cout << "deleted table" << std::endl;}
+    UserTable(const UserTable&) = delete;
+
+    ~UserTable() {delete[] users;}
 
     void addUser(const User&);
     User find(int) const;
@@ -28,6 +30,6 @@ private:
     int n{0};
     User* users;
 
-    friend int testFindNbr(const UserTable ut);
+    friend int testFindNbr(const UserTable &ut);
 };
 #endif

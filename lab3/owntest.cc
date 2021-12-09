@@ -34,7 +34,7 @@ int main() {
 	cout << "find Jonas Andersson: " << table.find("Jonas Andersson") << endl;
 	
 	
-	cout << "Number of users after adding a user: " << table.getNbrUsers() << endl;
+	cout << "Number of users after adding 3 users: " << table.getNbrUsers() << endl;
 	//table.print(cout);
 	cout << "testFindNbr result: " << testFindNbr(table) << endl;
 	return 0;

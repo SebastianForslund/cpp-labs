@@ -1,6 +1,10 @@
 #include <ctime>  // time and localtime
+#include <iostream>
+#include <string>
+
 #include "date.h"
 
+using namespace std;
 int Date::daysPerMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 Date::Date() {
@@ -13,16 +17,24 @@ Date::Date() {
 
 Date::Date(int y, int m, int d) {}
 
-int Date::getYear() const {
-	return 0;
+istream& operator>> (istream& is, string in) {
+	
 }
 
-int Date::getMonth() const {
-	return 0;
+ostream& operator<< (ostream& os, string out) {
+	
 }
 
-int Date::getDay() const {
-	return 0;
+int Date::getYear() const { //dessa kan vara fel
+	return year;
+}
+
+int Date::getMonth() const {//dessa
+	return month;
+}
+
+int Date::getDay() const {//dessa
+	return day;
 }
 
 void Date::next() {

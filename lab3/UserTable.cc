@@ -38,7 +38,6 @@ UserTable::UserTable(const std::string& fname) :UserTable{}
 void UserTable::addUser(const User& u)
 {
     // gör tabellen större vid behov
-
     ensureCapacity(n+1);
     // 1. Hitta rätt plats
     int pos{0};
@@ -57,7 +56,6 @@ void UserTable::addUser(const User& u)
 User UserTable::find(int c) const
 {
     // binärsökning (baserad på Holm, 2007)
-
     int low = 0;
     int high = n - 1;
     int mid = -1;
@@ -119,7 +117,7 @@ void UserTable::print(std::ostream& os) const
     * Om något kortnummer inte kunde sökas upp returneras detta. Annars, om
     * alla sökningar lyckades, returneras 0.
     */
-int testFindNbr(const UserTable ut)
+int testFindNbr(const UserTable &ut)
 {
     for (int i = 0; i < ut.n; i++) {
         int nbr = ut.users[i].getCardNbr();
@@ -127,7 +125,6 @@ int testFindNbr(const UserTable ut)
             return nbr;
         }
     }
-	
     return 0;
 }
 

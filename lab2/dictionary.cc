@@ -45,7 +45,7 @@ Dictionary::Dictionary() {
 		Word w(currentWord, trigVector);
 		this->words[currentWord.size()].push_back(w);
 		this->allWords.insert(currentWord);
-		cout << "word number " << wordCount << " out of approx. 102 199." << endl;
+		//cout << "word number " << wordCount << " out of approx. 102 199." << endl;
 	}
 	cout << "Dictionary load compelted." << endl;
 }
@@ -118,7 +118,7 @@ void Dictionary::add_trigram_suggestions(vector<string>& suggestions, const stri
 void Dictionary::rank_suggestions(vector<string>& suggestions, const string& input) const {
 	sort(suggestions.begin(), suggestions.end(), 
 		[input, this](string a, string b) {
-			return this->edit_distance(a, input) < this->edit_distance(b, input);
+			return edit_distance(a, input) < edit_distance(b, input);
 		}); 
 }
 
