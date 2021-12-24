@@ -1,1 +1,3 @@
-date: date.h
+date.o: date.cc date.h
+
+date.h:

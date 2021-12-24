@@ -33,15 +33,29 @@ void TagRemover::tr(istream& input) {
 			wholeInput.insert(index1, "\n");
 		}
 	}
-	while (wholeInput.find('&') != string::npos) {
+	while (wholeInput.find('&') != string::npos && wholeInput.find(';') != string::npos) {
 		auto index1 = wholeInput.find('&');
-		auto index2 = wholeInput.find(';');
+		auto index2 = wholeInput.find(';')+1;
 		auto lengthindex = index2-index1;
-		
-		cout << wholeInput.substr(index1, lengthindex) << endl; //Vettefan varför det blir såhär
-		
+		string character = wholeInput.substr(index1+1, lengthindex-2);
 		wholeInput.erase(index1, lengthindex);
+		
+		string specialChar;
+		if (character == "lt") {
+			specialChar = '<';
+		} else if (character == "gt") {
+			specialChar = '>';
+		} else if (character == "nbsp") {
+			specialChar = ' ';
+		} else if (character == "amp") {
+			specialChar = '&';
+		} else {
+			specialChar = '?';
+		}
+		wholeInput.insert(index1, specialChar);
+		cout << wholeInput << endl;
 	}
+	wholeInput.pop_back(); //icke nice
 	this->text = wholeInput;
 	return;
 }

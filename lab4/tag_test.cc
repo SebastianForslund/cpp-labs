@@ -30,11 +30,10 @@ int main() {
 	t.tr(inputStream);
 	t.print(outputStream);
 	
-	string supposedOutput = "This is a line without a tag\nThis is  a line with one tag\nAnd this  line has two tags \nA line with a starting tag \n\n which finished on this line \nSpecial chars: ";
+	string supposedOutput = "This is a line without a tag\nThis is  a line with one tag\nAnd this  line has two tags \nA line with a starting tag \n\n which finished on this line \nSpecial chars: <> &";
 	
 	cout << "Output from function: \n" << outputStream.str() << endl << "------------------" << endl;
 	cout << "Supposed output: \n" << supposedOutput << endl << "------------------" << endl;
-	
 	cout << "Comparing the two strings: " << outputStream.str().compare(supposedOutput) << endl;
 	
 	

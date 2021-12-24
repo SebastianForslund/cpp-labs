@@ -15,15 +15,12 @@ Date::Date() {
 	day = locTime->tm_mday;
 }
 
-Date::Date(int y, int m, int d) {}
-
-istream& operator>> (istream& is, string in) {
-	
+Date::Date(int y, int m, int d) {
+	this->year = y;
+	this->month = m;
+	this->day = d;
 }
 
-ostream& operator<< (ostream& os, string out) {
-	
-}
 
 int Date::getYear() const { //dessa kan vara fel
 	return year;

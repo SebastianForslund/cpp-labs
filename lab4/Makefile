@@ -21,7 +21,7 @@ LDFLAGS =   -g
 #LDFLAGS +=  -stdlib=libc++
 
 # Targets
-PROGS = tag_test sieve_test
+PROGS = tag_test sieve_test date_test
 
 all: $(PROGS)
 
@@ -29,11 +29,13 @@ test: date_test tag_test
 	./date_test
 	./tag_test
 	./sieve_test
+	./date_test
 
 
 # Targets rely on implicit rules for compiling and linking
 tag_test: TagRemover.o
 sieve_test: sieve.o
+date_test: date.o
 
 # Phony targets
 .PHONY: all test clean distclean
